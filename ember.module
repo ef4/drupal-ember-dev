@@ -1,0 +1,63 @@
+<?php
+
+use Drupal\Component\Serialization\Json;
+use Drupal\ember\Utility;
+
+function ember_page_attachments(&$page) {
+    // Ember accepts configuration from the server in the form of a
+    // <meta> tag.
+    $emberENV = [
+        // TODO: an Ember app can run inside a base URL, I would
+        // assume Drupal has a similar config option that should be
+        // passed through here.
+        "baseURL" => "/",
+
+        // This determines how Ember updates the URL. "history" means
+        // we should use the browser's History.pushState API to make
+        // Ember transitions use "real" URLs (as opposed to updating
+        // location.hash). This ensures that Ember-derived URLs will
+        // map directly to Drupal URLs, but it requires browsers with
+        // pushState support.
+        //
+        // We can still support older browsers by either choosing not
+        // to use Ember to manage those transitions
+        // (progressive-enhancement only) or by letting them do all
+        // their rendering clientside (where location.hash is
+        // visible).
+        "locationType" => "history",
+
+
+        // This controls what routes Ember will allow to load as
+        // normal page refreshes, as opposed to XHR. Note that this
+        // does *not* control whether a given route is rendered by
+        // Drupal vs Ember -- any page can still be a combination of
+        // both or either.
+        //
+        // These are regular expressions as interpreted by
+        // Javascript. All URLs are already adjusted to be relative to
+        // baseUrl (see earlier comment above).
+        //
+        // TODO: load this setting via conventional Drupal configuration.
+        //
+        // This default configuration allows Ember to control all
+        // transitions.
+        "cedeToDrupal" => [],
+
+        "modulePrefix" => "drupalcon",
+        "environment" => "development",
+        "APP" => []
+    ];
+
+    $page['#attached']['library'][] = 'ember/ember';
+    $page['#attached']['html_head'][] = [
+      [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'drupalcon/config/environment',
+          'content' => Utility::encodeURIComponent(Json::encode($emberENV))
+        ]
+      ],
+      'ember_meta_config'
+    ];
+
+}

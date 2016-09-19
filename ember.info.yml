@@ -1,0 +1,6 @@
+name: Ember
+description: Ember integration module
+core: 8.x
+type: module
+package: Experimental
+

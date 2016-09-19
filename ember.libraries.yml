@@ -1,0 +1,18 @@
+ember:
+  version: VERSION
+  js:
+    # This setup is explicitly for development mode, so that we're
+    # using live-reloadable assets provided by a running ember-cli. In
+    # production we will want to replace these with prebuilt versions
+    # that do not need to be external.
+    http://localhost:4200/assets/vendor.js: { type: external }
+    http://localhost:4200/assets/drupalcon.js: { type: external }
+    # Enable live-reload in dev, will not be relevant in production.
+    http://localhost:49152/livereload.js: { type: external }
+  css:
+    component:
+      http://localhost:4200/assets/vendor.css: { type: external }
+      http://localhost:4200/assets/drupalcon.css: { type: external }
+
+  dependencies:
+    - core/jquery
